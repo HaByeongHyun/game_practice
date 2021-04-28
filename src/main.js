@@ -41,6 +41,24 @@ gameFinishBanner.setClickListener(() => {
   startGame();
 });
 
+const gameField = new field(CARROT_COUNT, BUG_COUNT);
+gameField.setClickListener(onItemClick);
+
+function onItemClick(item) {
+  if (!started) {
+    return;
+  }
+  if (item === '.carrot') {
+    score++;
+    updateScoreBoard();
+    if (score === CARROT_COUNT) {
+      finishGame(true);
+    }
+  } else if (item === '.bug') {
+    finishGame(false);
+  }
+}
+
 function startGame() {
   started = true;
   initGame();
@@ -118,25 +136,6 @@ function initGame() {
   // 벌레와 당근을 생성한뒤 field에 추가해줌
   addItem('carrot', CARROT_COUNT, 'img/carrot.png');
   addItem('bug', BUG_COUNT, 'img/bug.png');
-}
-
-function onFieldClick(event) {
-  if (!started) {
-    return;
-  }
-  const target = event.target;
-  if (target.matches('.carrot')) {
-    // 당근!!
-    target.remove();
-    score++;
-    playSound(carrotSound);
-    updateScoreBoard();
-    if (score === CARROT_COUNT) {
-      finishGame(true);
-    }
-  } else if (target.matches('.bug')) {
-    finishGame(false);
-  }
 }
 
 function playSound(sound) {
